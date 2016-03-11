@@ -1,0 +1,18 @@
+name: check_meinberg_ntp
+description: "file:///README.md"
+url: "https://github.com/rsmuc/check_meinberg_ntp"
+tags: Timeserver, NTP
+vendor: Meinberg
+target: Hardware
+type: Plugin
+license: gplv2
+releases: 
+  - 
+    name: v0.0.2
+    description: "0.0.2 Release"
+    files: 
+      - 
+        name: check_meinberg_ntp.py
+        url: "file:///check_meinberg_ntp.py"
+        description: "0.0.2 release"
+        checksum: 3f73d4cf8712d7ef56103d3929cf0f64
