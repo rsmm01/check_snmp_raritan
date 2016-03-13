@@ -18,10 +18,10 @@ The plugin requires pynag (https://github.com/pynag/pynag) and python-netsnmp.
 
 #### Check the Inlet Power:
 
- ```./check_snmp_raritan.py -H 172.29.1.2 -t power```
+ ```./check_snmp_raritan.py -H 172.29.1.2 -t inlet```
  
  ```=> 
-OK - GPS Position: 48.1275 11.6126 623m. Good satellites: 10 | 'satellites'=10;;;;
+Warning - 3 0.003 W is belowLowerWarning | '3'=0.003W;0.003;0.003;;
  ```
 #### Monitor Sensor with ID 1:
 
@@ -29,21 +29,33 @@ OK - GPS Position: 48.1275 11.6126 623m. Good satellites: 10 | 'satellites'=10;;
 
  ``` 
 => 
-OK - GPS Position: 48.1275 11.6126 623m. Good satellites: 9 | 'satellites'=9;8:;2:;;
+Warning - 3 0.003 W is belowLowerWarning | '3'=0.003W;0.003;0.003;;
  ```
 
 
-#### Monitor Sensor with ID 1:
+#### Monitor Outlet with ID 3:
 
- ```./check_snmp_raritan.py -H 172.29.1.2 -t sensor -i 1```
+ ```./check_snmp_raritan.py -H 172.29.1.2 -t outlet -i 3```
+
+```
+Critical - Outlet 3 - '3' is: OFF
+```
 
 ## Parameters
  ```
-- -H HOSTNAME           Hostname or ip address
--  --version=VERSION     SNMP version (default: 2)
--  --community=COMMUNITY SNMP community (default: public)
--  -m MIB                Version of the MIB (NG = MBG-LANTIME-NG-MIB.mib) 
+Options:
+  -h, --help            show this help message and exit
+  -H HOSTNAME           Hostname or ip address
+  -C COMMUNITY, --community=COMMUNITY
+                        SNMP community of the SNMP service on target host.
+  -V VERSION, --snmpversion=VERSION
+                        SNMP version. (1 or 2)
+  -t TYP                The type you want to monitor (inlet, outlet, sensor)
+  -i ID                 The id of the outlet / sensor you want to monitor
+                        (1-99)
  ``` 
 
 ## TODO:
 * Implement SNMPv3
+* Maybe it should be possible to monitor all services / sensors in one check
+* Cleanup the code

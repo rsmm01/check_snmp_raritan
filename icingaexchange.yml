@@ -1,18 +1,18 @@
-name: check_meinberg_ntp
+name: check_snmp_raritan
 description: "file:///README.md"
-url: "https://github.com/rsmuc/check_meinberg_ntp"
-tags: Timeserver, NTP
-vendor: Meinberg
+url: "https://github.com/rsmuc/check_snmp_raritan"
+tags: PDU, Power Distribution Unit
+vendor: Raritan
 target: Hardware
 type: Plugin
 license: gplv2
 releases: 
   - 
-    name: v0.0.2
-    description: "0.0.2 Release"
+    name: v0.0.1
+    description: "0.0.1 Release"
     files: 
       - 
-        name: check_meinberg_ntp.py
-        url: "file:///check_meinberg_ntp.py"
-        description: "0.0.2 release"
+        name: check_snmp_raritan.py
+        url: "file:///check_snmp_raritan.py"
+        description: "0.0.1 release"
         checksum: 3f73d4cf8712d7ef56103d3929cf0f64
