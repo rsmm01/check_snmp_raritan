@@ -9,8 +9,6 @@ Check a Raritan Dominition PX PDU (Power Distribution Unit):
 * Tested device: PX2-2486
 * Tested sensors: Temperature, Humidity, Contact Closure, Air Pressure
 
-# under development (do not use the plugin)
-
 The plugin requires pynag (https://github.com/pynag/pynag) and python-netsnmp.
 
 
@@ -21,15 +19,17 @@ The plugin requires pynag (https://github.com/pynag/pynag) and python-netsnmp.
  ```./check_snmp_raritan.py -H 172.29.1.2 -t inlet```
  
  ```=> 
-Warning - 3 0.003 W is belowLowerWarning | '3'=0.003W;0.003;0.003;;
- ```
+ OK - Inlet. 5.1 A. 230.0 V. 1118.0 W. 1165.0 VA. 0.96. 6904491.0 Wh | 'A'=5.1A;10.4;12.8;; 'V'=230.0V;247.0;254.0;; 'W'=1118.0W;0.0;0.0;; 'VA'=1165.0VA;0.0;0.0;; ''=0.96;0.0;0.0;; 'Wh'=6904491.0Wh;0.0;0.0;;
+  ```
 #### Monitor Sensor with ID 1:
 
  ```./check_snmp_raritan.py -H 172.29.1.2 -t sensor -i 1```
 
  ``` 
-=> 
-Warning - 3 0.003 W is belowLowerWarning | '3'=0.003W;0.003;0.003;;
+=> Critical - Sensor 4 - 'On/Off 1'  is: alarmed
+
+=> OK - Sensor 4 - 'Humidity 1' 18.0% is: normal | 'Humidity 1'=18.0%;70.0;80.0;;
+
  ```
 
 
@@ -38,7 +38,7 @@ Warning - 3 0.003 W is belowLowerWarning | '3'=0.003W;0.003;0.003;;
  ```./check_snmp_raritan.py -H 172.29.1.2 -t outlet -i 3```
 
 ```
-Critical - Outlet 3 - '3' is: OFF
+Critical - Outlet 3 - 'Switch HP' is: OFF
 ```
 
 ## Parameters
@@ -58,4 +58,4 @@ Options:
 ## TODO:
 * Implement SNMPv3
 * Maybe it should be possible to monitor all services / sensors in one check
-* Cleanup the code
+* Cleanup the code (don't mix string and int compares)
