@@ -84,6 +84,7 @@ names = {
 	'p': 'Power',
 	}
 
+#cleanup: for the inlet we should read the available 
 #sensors = {
 #    0: "rmsCurrent",
 #    1: "None",
@@ -161,7 +162,9 @@ if typ.lower() == "inlet":
     oid_inlet_state              = '.1.3.6.1.4.1.13742.6.5.2.3.1.3' # the state if this is ok or not ok
     oid_inlet_warning_upper      = '.1.3.6.1.4.1.13742.6.3.3.4.1.24' # warning_upper_threhsold (must be divided by the digit)
     oid_inlet_critical_upper     = '.1.3.6.1.4.1.13742.6.3.3.4.1.23' # critical_upper_threhold (must be divided by the digit)
-    
+    oid_inlet_warning_lower      = '.1.3.6.1.4.1.13742.6.3.3.4.1.22'
+    oid_inlet_critical_lower     = '.1.3.6.1.4.1.13742.6.3.3.4.1.21'
+
     # walk the data
     inlet_values                = walk_data(host, version, community, oid_inlet_value)
     inlet_units                 = walk_data(host, version, community, oid_inlet_unit)
@@ -169,7 +172,9 @@ if typ.lower() == "inlet":
     inlet_states                = walk_data(host, version, community, oid_inlet_state)    
     inlet_warning_uppers        = walk_data(host, version, community, oid_inlet_warning_upper)    
     inlet_critical_uppers       = walk_data(host, version, community, oid_inlet_critical_upper)
-    
+    inlet_critical_lowers       = walk_data(host, version, community, oid_inlet_critical_lower)
+    inlet_warning_lowers        = walk_data(host, version, community, oid_inlet_warning_lower)
+
     # just print the summary, that the inlet sensors are checked
     helper.add_summary("Inlet")
 
@@ -183,6 +188,8 @@ if typ.lower() == "inlet":
         inlet_value             = real_value(inlet_values[x], inlet_digit)        
         inlet_warning_upper     = real_value(inlet_warning_uppers[x], inlet_digit)
         inlet_critical_upper    = real_value(inlet_critical_uppers[x], inlet_digit)
+        inlet_warning_lower     = real_value(inlet_warning_lowers[x], inlet_digit)
+        inlet_critical_lower    = real_value(inlet_critical_lowers[x], inlet_digit)
         
         if inlet_state == "belowLowerCritical" or inlet_state == "belowUpperCritical":            
             # we don't want to use the thresholds. we rely on the state value of the device
@@ -192,11 +199,12 @@ if typ.lower() == "inlet":
         if inlet_state == "belowLowerWarning" or inlet_state == "belowUpperWarning":            
             helper.add_summary("%s %s is %s" % (inlet_value, inlet_unit, inlet_state))
             helper.status(warning)
-        
+                
         # we always want to see the values in the long output and in the perf data
         helper.add_summary("%s %s" % (inlet_value, inlet_unit))
         helper.add_long_output("%s %s: %s" % (inlet_value, inlet_unit, inlet_state))
-        helper.add_metric(inlet_unit, inlet_value, inlet_warning_upper, inlet_critical_upper, "", "", inlet_unit)
+        helper.add_metric("Sensor " + str(x), inlet_value, inlet_warning_lower + ":" + inlet_warning_upper, inlet_critical_lower + ":" + inlet_critical_upper, "", "", inlet_unit)
+                
 
 ######
 # here we check the outlets
@@ -238,6 +246,8 @@ if typ.lower() == "sensor":
     oid_sensor_type             =   '.1.3.6.1.4.1.13742.6.3.6.3.1.2.1.'		+ id	#Type
     oid_sensor_warning_upper    =   '.1.3.6.1.4.1.13742.6.3.6.3.1.34.1.'    + id    #Upper Warnung Threshold
     oid_sensor_critical_upper   =   '.1.3.6.1.4.1.13742.6.3.6.3.1.33.1.'    + id    #Upper Critical Threshold    
+    oid_sensor_warning_lower    =   '.1.3.6.1.4.1.13742.6.3.6.3.1.32.1.'    + id    #Lower Warnung Threshold
+    oid_sensor_critical_lower   =   '.1.3.6.1.4.1.13742.6.3.6.3.1.31.1.'    + id    #Lower Critical Threshold    
 
     sensor_name             = get_data(host, version, community, oid_sensor_name)
     sensor_state            = get_data(host, version, community, oid_sensor_state)
@@ -250,6 +260,8 @@ if typ.lower() == "sensor":
     sensor_type             = get_data(host, version, community, oid_sensor_type)
     sensor_warning_upper    = ""
     sensor_critical_upper   = ""
+    sensor_warning_lower    = ""
+    sensor_critical_lower   = ""
 
     if int(sensor_type) not in [14, 16, 17, 18, 19, 20]:
         # for all sensors except these, we want to calculate the real value and show the metric.
@@ -264,12 +276,16 @@ if typ.lower() == "sensor":
         sensor_digit                = get_data(host, version, community, oid_sensor_digit)
         sensor_warning_upper        = get_data(host, version, community, oid_sensor_warning_upper)
         sensor_critical_upper       = get_data(host, version, community, oid_sensor_critical_upper)
+        sensor_warning_lower        = get_data(host, version, community, oid_sensor_warning_lower)
+        sensor_critical_lower       = get_data(host, version, community, oid_sensor_critical_lower)
         sensor_value                = int(get_data(host, version, community, oid_sensor_value))
         real_sensor_value           = real_value(sensor_value, sensor_digit)
         real_sensor_warning_upper   = real_value(sensor_warning_upper, sensor_digit)
         real_sensor_critical_upper  = real_value(sensor_critical_upper, sensor_digit)
+        real_sensor_warning_lower   = real_value(sensor_warning_lower, sensor_digit)
+        real_sensor_critical_lower  = real_value(sensor_critical_lower, sensor_digit)
         # metric are only possible for these sensors
-        helper.add_metric(sensor_name, real_sensor_value, real_sensor_warning_upper, real_sensor_critical_upper, "", "", sensor_unit_string)
+        helper.add_metric(sensor_name, real_sensor_value, real_sensor_warning_lower + ":" + real_sensor_warning_upper, real_sensor_critical_lower + ":" + real_sensor_critical_upper, "", "", sensor_unit_string)
     
     if int(sensor_state) in [1, 4, 7, 10, 12, 15, 18, 19, 20]:
         # 1:    closed
