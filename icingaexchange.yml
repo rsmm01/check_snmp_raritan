@@ -8,11 +8,11 @@ type: Plugin
 license: gplv2
 releases: 
   - 
-    name: v0.0.1
-    description: "0.0.1 Release"
+    name: v0.0.2
+    description: "0.0.2 Release"
     files: 
       - 
         name: check_snmp_raritan.py
         url: "file:///check_snmp_raritan.py"
-        description: "0.0.1 release"
+        description: "0.0.2 release: fixed thresholds"
         checksum: 3f73d4cf8712d7ef56103d3929cf0f64
