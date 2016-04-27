@@ -191,12 +191,12 @@ if typ.lower() == "inlet":
         inlet_warning_lower     = real_value(inlet_warning_lowers[x], inlet_digit)
         inlet_critical_lower    = real_value(inlet_critical_lowers[x], inlet_digit)
         
-        if inlet_state == "belowLowerCritical" or inlet_state == "belowUpperCritical":            
+        if inlet_state == "belowLowerCritical" or inlet_state == "aboveUpperCritical":
             # we don't want to use the thresholds. we rely on the state value of the device
             helper.add_summary("%s is %s" % (inlet_value, inlet_unit, inlet_state))
             helper.status(critical)
         
-        if inlet_state == "belowLowerWarning" or inlet_state == "belowUpperWarning":            
+        if inlet_state == "belowLowerWarning" or inlet_state == "aboveUpperWarning":
             helper.add_summary("%s %s is %s" % (inlet_value, inlet_unit, inlet_state))
             helper.status(warning)
                 
